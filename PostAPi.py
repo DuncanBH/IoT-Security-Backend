@@ -17,11 +17,7 @@ def createSound():
     else:
         body["detected"] = False
 
-
-
     return jsonify(body), 200
-
-
 
 
 app.run()
