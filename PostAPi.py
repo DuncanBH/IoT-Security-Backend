@@ -57,4 +57,9 @@ def createSound():
     return jsonify(body), 200
 
 
+@app.route("/api/sound/average/daily")
+def getDailySoundAverage():
+    data = db.Sound.aggregate(daily_average_pipeline)
+    return jsonify(list(data))
+
 app.run()
