@@ -30,3 +30,31 @@ daily_average_pipeline = [
         }
     }
 ]
+
+def sound_for_a_day(year, month, day):
+    return [
+        {
+            '$match': {
+                'value': {
+                    '$type': 'int'
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 0,
+                'date': {
+                    '$dateToParts': {
+                        'date': '$timestamp'
+                    }
+                },
+                'sensorId': 1,
+                'value': 1
+            }
+        }, {
+            '$match': {
+                'date.year': year,
+                'date.month': month,
+                'date.day': day
+            }
+        }
+    ]
