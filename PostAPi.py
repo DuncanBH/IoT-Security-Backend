@@ -34,12 +34,12 @@ if 'Sound' not in db.list_collection_names():
 
 
 # DB populator
-import random
-for x in range(0, 20):
-    db.Motion.insert_one(
-        {"timestamp": dt.datetime.today().replace(microsecond=0), "sensorId": "test",
-         "value": random.randint(0, 1)}
-    )
+# import random
+# for x in range(0, 20):
+#     db.Motion.insert_one(
+#         {"timestamp": dt.datetime.today().replace(microsecond=0), "sensorId": "test",
+#          "value": random.randint(0, 1)}
+#     )
 
 @app.route("/api/sound", methods=["POST"])
 def createSound():
