@@ -1,5 +1,11 @@
 daily_average_pipeline = [
     {
+        '$match': {
+            'value': {
+                '$type': 'int'
+            }
+        }
+    }, {
         '$project': {
             '_id': 0,
             'date': {
