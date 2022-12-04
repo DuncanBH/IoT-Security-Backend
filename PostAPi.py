@@ -2,7 +2,7 @@ import pymongo as pymongo
 from flask import Flask, request, jsonify
 from pymongo.server_api import ServerApi
 
-from Pipelines import daily_average_pipeline, sound_for_a_day
+from Pipelines import daily_average_pipeline
 from Schemas import SoundSchema
 from dotenv import load_dotenv
 import datetime as dt
@@ -61,13 +61,5 @@ def createSound():
 def getDailySoundAverage():
     data = db.Sound.aggregate(daily_average_pipeline)
     return jsonify(list(data))
-
-
-@app.route("/api/sound/<int:year>/<int:month>/<int:day>")
-def getSoundForADay(year, month, day):
-    print(sound_for_a_day(year, month, day))
-    data = db.Sound.aggregate(sound_for_a_day(year, month, day))
-    return jsonify(list(data))
-
 
 app.run()

@@ -58,3 +58,38 @@ def sound_for_a_day(year, month, day):
             }
         }
     ]
+
+
+daily_count_pipeline = [
+    {
+        '$match': {
+            'value': {
+                '$type': 'int',
+                '$eq': 1
+            }
+        }
+    }, {
+        '$project': {
+            '_id': 0,
+            'date': {
+                '$dateToParts': {
+                    'date': '$timestamp'
+                }
+            },
+            'value': 1
+        }
+    }, {
+        '$group': {
+            '_id': {
+                'date': {
+                    'year': '$date.year',
+                    'month': '$date.month',
+                    'day': '$date.day'
+                }
+            },
+            'value': {
+                '$count': {}
+            }
+        }
+    }
+]
