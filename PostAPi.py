@@ -36,9 +36,11 @@ if 'Sound' not in db.list_collection_names():
 # DB populator
 # import random
 # for x in range(0, 20):
+#     motionSeenCount = random.randint(0, 60)
+#     motionSeen = motionSeenCount >= 40
 #     db.Motion.insert_one(
 #         {"timestamp": dt.datetime.today().replace(microsecond=0), "sensorId": "test",
-#          "value": random.randint(0, 1)}
+#          "value": motionSeenCount, "motionSeen": motionSeen}
 #     )
 
 @app.route("/api/sound", methods=["POST"])
@@ -50,9 +52,9 @@ def createSound():
         return {"message": "Invalid body"}, 401
 
     if body["soundAvg"] >= 650:
-        body["detected"] = True
+        body["motionSeen"] = True
     else:
-        body["detected"] = False
+        body["motionSeen"] = False
 
     return jsonify(body), 200
 
@@ -61,5 +63,6 @@ def createSound():
 def getDailySoundAverage():
     data = db.Sound.aggregate(daily_average_pipeline)
     return jsonify(list(data))
+
 
 app.run()

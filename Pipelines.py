@@ -31,6 +31,7 @@ daily_average_pipeline = [
     }
 ]
 
+
 def sound_for_a_day(year, month, day):
     return [
         {
@@ -63,9 +64,8 @@ def sound_for_a_day(year, month, day):
 daily_count_pipeline = [
     {
         '$match': {
-            'value': {
-                '$type': 'int',
-                '$eq': 1
+            'motionSeen': {
+                '$eq': True
             }
         }
     }, {
