@@ -48,7 +48,6 @@ def sound_for_a_day(year, month, day):
                         'date': '$timestamp'
                     }
                 },
-                'sensorId': 1,
                 'value': 1
             }
         }, {

@@ -2,5 +2,7 @@ from marshmallow import Schema, fields
 
 
 class SoundSchema(Schema):
-    soundAvg = fields.Integer(required=True)
+    value = fields.Integer(required=True)
+class MotionSchema(Schema):
+    value = fields.Integer(required=True)
 

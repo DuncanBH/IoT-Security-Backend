@@ -2,7 +2,7 @@ import pymongo as pymongo
 from flask import Flask, request, jsonify
 from pymongo.server_api import ServerApi
 
-from Pipelines import daily_average_pipeline
+from Pipelines import daily_average_pipeline, daily_count_pipeline
 from Schemas import SoundSchema
 from dotenv import load_dotenv
 import datetime as dt
@@ -51,10 +51,17 @@ def createSound():
     if error:
         return {"message": "Invalid body"}, 401
 
-    if body["soundAvg"] >= 650:
-        body["motionSeen"] = True
+    if body["value"] >= 650:
+        body["soundHeard"] = True
     else:
-        body["motionSeen"] = False
+        body["soundHeard"] = False
+
+    body["timestamp"] = dt.datetime.today().replace(microsecond=0)
+    body["sensorId"] = "Sound"
+
+    db.Sound.insert_one(body)
+
+    body["_id"] = str(body["_id"])
 
     return jsonify(body), 200
 
@@ -62,6 +69,35 @@ def createSound():
 @app.route("/api/sound/average/daily")
 def getDailySoundAverage():
     data = db.Sound.aggregate(daily_average_pipeline)
+    return jsonify(list(data))
+
+
+@app.route("/api/motion", methods=['POST'])
+def crateMotion():
+    body = request.json
+    error = SoundSchema().validate(data=body)
+
+    if error:
+        return {"message": "Invalid body"}, 401
+
+    if body["value"] >= 40:
+        body["motionSeen"] = True
+    else:
+        body["motionSeen"] = False
+
+    body["timestamp"] = dt.datetime.today().replace(microsecond=0)
+    body["sensorId"] = "Motion"
+
+    db.Motion.insert_one(body)
+
+    body["_id"] = str(body["_id"])
+
+    return jsonify(body), 200
+
+
+@app.route("/api/motion/count/daily")
+def getDailyMotionCount():
+    data = db.Motion.aggregate(daily_count_pipeline)
     return jsonify(list(data))
 
 
