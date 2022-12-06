@@ -32,15 +32,16 @@ daily_average_pipeline = [
 ]
 
 
-def sound_for_a_day(year, month, day):
-    return [
+def sound_for_period(year, month, day):
+    pipeline = [
         {
             '$match': {
                 'value': {
                     '$type': 'int'
                 }
             }
-        }, {
+        },
+        {
             '$project': {
                 '_id': 0,
                 'date': {
@@ -50,14 +51,29 @@ def sound_for_a_day(year, month, day):
                 },
                 'value': 1
             }
-        }, {
+        },
+        {
             '$match': {
-                'date.year': year,
-                'date.month': month,
-                'date.day': day
             }
         }
     ]
+
+    match = {}
+
+    if year is not None:
+        match.update({'date.year': int(year)})
+
+    if month is not None:
+        match.update({'date.month': int(month)})
+
+    if day is not None:
+        match.update({'date.day': int(day)})
+
+    pipeline[2]['$match'] = match
+
+    print("Match", match)
+    print("Pipeline", pipeline)
+    return pipeline
 
 
 daily_count_pipeline = [
