@@ -81,8 +81,6 @@ def average_for_period(year, month, day):
 
     pipeline[2]['$match'] = match
 
-    print("Match", match)
-    print("Pipeline", pipeline)
     return pipeline
 
 
