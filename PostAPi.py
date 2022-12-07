@@ -57,7 +57,6 @@ def createSound():
         body["soundHeard"] = False
 
     body["timestamp"] = dt.datetime.today().replace(microsecond=0)
-    body["sensorId"] = "Sound"
 
     db.Sound.insert_one(body)
 
@@ -95,7 +94,6 @@ def crateMotion():
         body["motionSeen"] = False
 
     body["timestamp"] = dt.datetime.today().replace(microsecond=0)
-    body["sensorId"] = "Motion"
 
     db.Motion.insert_one(body)
 
