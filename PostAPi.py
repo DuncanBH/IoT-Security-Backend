@@ -46,6 +46,7 @@ if 'Sound' not in db.list_collection_names():
 @app.route("/api/sound", methods=["POST"])
 def createSound():
     body = request.json
+    print(body)
     error = SoundSchema().validate(data=body)
 
     if error:

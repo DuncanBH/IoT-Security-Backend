@@ -1,16 +1,28 @@
-import unittest
-from PostAPi import app
+import random
+import requests
 
-class SendDummyData(unittest.TestCase):
+import time
 
-    def setUp(self):
-        self.app = app.test_client()
+starttime = time.time()
 
-    def send_detected_data(self):
-        response = self.app.post("/api/sound",
-                                 headers={"Content-Type": "application/json"},
-                                 data={"soundAvg": 700})
+while True:
+    print("tick")
 
+    soundVal = random.randint(0, 2000)
+    motionVal = random.randint(0, 60)
 
-if __name__ == "__main__":
-    unittest.main()
+    response = requests.post("http://127.0.0.1:5000/api/sound",
+                             headers={"Content-Type": "application/json"},
+                             json={'value': soundVal,
+                                   'sensorId': 'SoundTest'})
+
+    print(response.text)
+
+    response2 = requests.post("http://127.0.0.1:5000/api/motion",
+                              headers={"Content-Type": "application/json"},
+                              json={'value': motionVal,
+                                    'sensorId': 'MotionTest'})
+
+    print(response2.text)
+
+    time.sleep(60.0 - ((time.time() - starttime) % 60.0))
