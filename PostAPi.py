@@ -2,7 +2,7 @@ import pymongo as pymongo
 from flask import Flask, request, jsonify
 from pymongo.server_api import ServerApi
 
-from Pipelines import daily_average_pipeline, daily_count_pipeline, sound_for_period, average_for_period
+from Pipelines import sound_for_period, average_for_period, count_for_period, motion_for_period
 from Schemas import SoundSchema
 from dotenv import load_dotenv
 import datetime as dt
@@ -104,9 +104,18 @@ def crateMotion():
     return jsonify(body), 200
 
 
-@app.route("/api/motion/count/daily")
+@app.route("/api/motion")
 def getDailyMotionCount():
-    data = db.Motion.aggregate(daily_count_pipeline)
+    count = request.args.get("count", False)
+    year = request.args.get("year", None)
+    month = request.args.get("month", None)
+    day = request.args.get("day", None)
+
+    if count:
+        data = db.Motion.aggregate(count_for_period(year, month, day))
+    else:
+        data = db.Motion.aggregate(motion_for_period(year, month, day))
+
     return jsonify(list(data))
 
 

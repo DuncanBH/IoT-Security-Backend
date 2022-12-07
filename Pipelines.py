@@ -158,3 +158,98 @@ daily_count_pipeline = [
         }
     }
 ]
+
+
+
+def count_for_period(year, month, day):
+    pipeline = [
+        {
+            '$match': {
+                'value': {
+                    '$type': 'int'
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 0,
+                'date': {
+                    '$dateToParts': {
+                        'date': '$timestamp'
+                    }
+                },
+                'value': 1
+            }
+        }, {
+            '$match': {
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'date': {
+                        'year': '$date.year',
+                        'month': '$date.month',
+                        'day': '$date.day'
+                    }
+                },
+                'average': {
+                    '$count': {}
+                }
+            }
+        }
+    ]
+    match = {}
+
+    if year is not None:
+        match.update({'date.year': int(year)})
+
+    if month is not None:
+        match.update({'date.month': int(month)})
+
+    if day is not None:
+        match.update({'date.day': int(day)})
+
+    pipeline[2]['$match'] = match
+
+    return pipeline
+
+
+def motion_for_period(year, month, day):
+    pipeline = [
+        {
+            '$match': {
+                'value': {
+                    '$type': 'int'
+                }
+            }
+        },
+        {
+            '$project': {
+                '_id': 0,
+                'date': {
+                    '$dateToParts': {
+                        'date': '$timestamp'
+                    }
+                },
+                'value': 1
+            }
+        },
+        {
+            '$match': {
+            }
+        }
+    ]
+
+    match = {}
+
+    if year is not None:
+        match.update({'date.year': int(year)})
+
+    if month is not None:
+        match.update({'date.month': int(month)})
+
+    if day is not None:
+        match.update({'date.day': int(day)})
+
+    pipeline[2]['$match'] = match
+
+    return pipeline
