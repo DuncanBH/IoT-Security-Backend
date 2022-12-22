@@ -115,3 +115,6 @@ def getDailyMotionCount():
         data = db.Motion.aggregate(motion_for_period(year, month, day))
 
     return jsonify(list(data))
+
+
+app.run(debug=True, port=5000, host="0.0.0.0")
