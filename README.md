@@ -19,9 +19,9 @@ The motion sensor detects the presence of an infrared signature in front of it, 
 # MongoDB Schema Design
 The MongoDB database will contain two collections, one with the readings of the sound sensor and one with the reading of the motion sensor. 
 
-The sound sensor readings will be sent to the database when the average of a certain number of consecutive readings is above a certain threshold. Both the number of readings and the threshold will be determined through testing of the sensors. We can potentially use the existing threshold from the binary output as the threshold. We could also have a dynamic threshold, that could be based on the average sound over a certain time instead of a fixed one. 
+The sound sensor readings will be sent to the database when the average of the readings over the last minute. If the sound readings are above 650, it will mark the minute as having had sound. Otherwise, it will not.
 
-Meanwhile, the motion sensor data will be sent when a large enough proportion of recent readings have detected movement. Again, the number of readings and the proportion of them needed to be considered as having detected movement are going to need to be determined through further testing. 
+Meanwhile, the motion sensor data will be the count of seconds over a minute where motion was detected. If more than 40 seconds included movements, the minute will be marked as having had movements.
 
 # API Endpoints:
 ## Get Sound Levels  
